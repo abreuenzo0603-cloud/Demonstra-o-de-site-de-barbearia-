@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DON CORTE BARBEARIA — Agendamento online</title>
+<style>
+:root{--bg:#0b0b0c;--card:#151517;--line:#2a2a2d;--gold:#c9a24b;--gold2:#e6c97a;--txt:#f5f3ee;--mut:#a8a6a0;--err:#ff7b72;--ok:#6fd08c;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3,.logo{font-family:Georgia,"Times New Roman",serif;margin:0}
+a{color:inherit;text-decoration:none}
+section{padding:72px 20px;max-width:1100px;margin:auto}
+h2{font-size:clamp(1.8rem,5vw,2.5rem);color:var(--gold2);margin-bottom:8px}
+.sub{color:var(--mut);margin:0 0 32px}
+.btn{display:inline-block;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#111;font-weight:700;border:0;border-radius:8px;padding:12px 22px;cursor:pointer;font-size:1rem;transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px #c9a24b44}
+.btn.ghost{background:none;border:1px solid var(--gold);color:var(--gold2)}
+.btn:disabled{opacity:.6;cursor:wait}
+header{position:fixed;top:0;left:0;right:0;z-index:20;background:#0b0b0cee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+.logo{font-size:1.4rem;letter-spacing:3px;color:var(--gold2);font-weight:700}
+nav ul{display:flex;gap:22px;list-style:none;margin:0;padding:0;align-items:center}
+nav a:hover{color:var(--gold2)}
+#burger{display:none;background:none;border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:6px 12px;font-size:1.2rem}
+@media(max-width:820px){#burger{display:block}nav ul{display:none;position:absolute;top:100%;left:0;right:0;background:#0b0b0cf5;flex-direction:column;padding:20px;border-bottom:1px solid var(--line)}nav ul.open{display:flex}}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center;min-height:100vh;padding-top:110px}
+@media(max-width:820px){.hero{grid-template-columns:1fr;min-height:0}}
+.hero h1{font-size:clamp(2.2rem,7vw,3.8rem);line-height:1.1}
+.hero h1 span{color:var(--gold2)}.tag{color:var(--gold);letter-spacing:2px;text-transform:uppercase;font-size:.8rem}
+.hero p{color:var(--mut);max-width:48ch}
+.pole{width:100%;max-width:380px;margin:auto;display:block}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--gold);transform:translateY(-3px)}
+.card h3{font-size:1.15rem;margin-bottom:6px}.card p{color:var(--mut);margin:0 0 12px;font-size:.95rem}
+.meta{display:flex;justify-content:space-between;color:var(--gold2);font-weight:700;margin-bottom:14px}.meta small{color:var(--mut);font-weight:400}
+.ico{font-size:1.6rem;color:var(--gold)}
+.gal{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.tile{aspect-ratio:4/3;border-radius:14px;border:1px solid var(--line);overflow:hidden;display:flex;align-items:flex-end;position:relative;background:linear-gradient(145deg,#1d1c1a,#0f0f10)}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile svg{position:absolute;inset:0;margin:auto;width:46%;opacity:.5}
+.tile b{position:relative;padding:10px 14px;width:100%;background:linear-gradient(transparent,#000c);font-weight:600}
+.book{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;display:grid;gap:26px}
+.step h3{font-size:1.05rem;color:var(--gold2);margin-bottom:10px}
+.step h3 i{font-style:normal;display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#111;font:700 .85rem system-ui;margin-right:8px}
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opt{background:#0f0f10;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:.95rem;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--gold)}
+.opt.sel{background:var(--gold);color:#111;border-color:var(--gold);font-weight:700}
+.opt:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.cal{max-width:340px}.calh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;text-transform:capitalize}
+.calh button{background:none;border:1px solid var(--line);color:var(--txt);border-radius:8px;width:34px;height:34px;cursor:pointer}.calh button:disabled{opacity:.3}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.days span{font-size:.75rem;color:var(--mut)}.days .opt{padding:8px 0;text-align:center}
+input{width:100%;background:#0f0f10;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:12px;font-size:1rem}
+input:focus,.opt:focus-visible,.btn:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.fields{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.sum{background:#0f0f10;border:1px dashed var(--gold);border-radius:12px;padding:16px}
+.sum div{display:flex;justify-content:space-between;padding:4px 0;gap:12px}.sum span{color:var(--mut)}
+.msg{min-height:24px;font-weight:600}.msg.err{color:var(--err)}.msg.ok{color:var(--ok)}
+.done{text-align:center;padding:10px}.done .check{font-size:3rem;color:var(--ok)}
+.note{color:var(--mut);font-size:.85rem}
+footer{border-top:1px solid var(--line);padding:32px 20px;text-align:center;color:var(--mut);font-size:.9rem}
+footer nav ul{justify-content:center;display:flex;position:static;flex-wrap:wrap;gap:16px;padding:0;margin-bottom:14px}
+.fade{opacity:0;transform:translateY(16px);transition:.7s}.fade.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.fade{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+<a href="#inicio" class="logo">DON CORTE</a>
+<nav><ul id="menu">
+<li><a href="#inicio">Início</a></li><li><a href="#servicos">Serviços</a></li><li><a href="#sobre">Sobre</a></li><li><a href="#galeria">Galeria</a></li><li><a href="#contato">Contato</a></li>
+<li><a class="btn" href="#agendar">Agendar horário</a></li></ul></nav>
+<button id="burger" aria-label="Abrir menu">☰</button>
+</div></header>
+
+<section class="hero" id="inicio">
+<div>
+<div class="tag">Itaperuna — RJ · Demonstração</div>
+<h1>Seu estilo, <span>nossa especialidade.</span></h1>
+<p>Cortes clássicos e modernos, barba alinhada na navalha e atendimento sob medida. Escolha o serviço, o barbeiro e o melhor horário em poucos toques.</p>
+<p style="color:var(--gold2);font-style:italic">“Mais que um corte, autoestima.”</p>
+<a class="btn" href="#agendar">Agendar agora</a>
+</div>
+<svg class="pole" viewBox="0 0 200 300" role="img" aria-label="Ilustração de poste de barbearia">
+<defs><clipPath id="c"><rect x="70" y="60" width="60" height="180" rx="30"/></clipPath></defs>
+<rect x="60" y="30" width="80" height="34" rx="8" fill="#c9a24b"/><rect x="60" y="236" width="80" height="34" rx="8" fill="#c9a24b"/>
+<rect x="70" y="60" width="60" height="180" rx="30" fill="#f5f3ee"/>
+<g clip-path="url(#c)" fill="#c9a24b"><path d="M60 80l80 40v24L60 104zM60 140l80 40v24L60 164zM60 200l80 40v24L60 224z"/></g>
+<rect x="70" y="60" width="60" height="180" rx="30" fill="none" stroke="#e6c97a" stroke-width="3"/>
+<circle cx="100" cy="18" r="10" fill="#e6c97a"/></svg>
+</section>
+
+<section class="fade"><div class="grid" id="perks"></div></section>
+
+<section id="servicos" class="fade"><h2>Serviços</h2><p class="sub">Valores demonstrativos — edite em <code>SERVICES</code> no código.</p><div class="grid" id="svcGrid"></div></section>
+
+<section id="agendar" class="fade"><h2>Agende seu horário</h2><p class="sub">Preencha as etapas abaixo. O resumo é atualizado em tempo real.</p>
+<div class="book" id="book">
+<div class="step"><h3><i>1</i>Serviço</h3><div class="opts" id="svcOpts"></div></div>
+<div class="step"><h3><i>2</i>Barbeiro</h3><div class="opts" id="barOpts"></div></div>
+<div class="step"><h3><i>3</i>Data</h3><div class="cal"><div class="calh"><button id="prev" aria-label="Mês anterior">‹</button><b id="mon"></b><button id="next" aria-label="Próximo mês">›</button></div><div class="days" id="days"></div></div></div>
+<div class="step"><h3><i>4</i>Horário</h3><div class="opts" id="slots"><span class="note">Escolha serviço, barbeiro e data para ver os horários.</span></div><p class="note">Horários riscados estão ocupados ou já passaram. Atendimento seg–sáb, 08h–18h (almoço 12h–13h).</p></div>
+<div class="step"><h3><i>5</i>Seus dados</h3><div class="fields"><input id="nome" placeholder="Nome completo" autocomplete="name"><input id="tel" placeholder="Telefone com DDD" inputmode="tel" autocomplete="tel"></div></div>
+<div class="step"><h3><i>6</i>Resumo</h3><div class="sum" id="sum"></div></div>
+<div><div class="msg" id="msg" role="alert"></div><button class="btn" id="go">Confirmar agendamento</button></div>
+</div></section>
+
+<section id="sobre" class="fade"><h2>Sobre nós</h2>
+<p style="max-width:65ch;color:var(--mut)">Texto fictício: a Don Corte nasceu da ideia de que cuidar da aparência é cuidar de si. Unimos técnica, pontualidade e um ambiente acolhedor para que cada cliente saia com a confiança renovada. Aqui o tempo é respeitado, o detalhe importa e ninguém é só mais um na cadeira.</p></section>
+
+<section id="galeria" class="fade"><h2>Galeria</h2><p class="sub">Imagens ilustrativas — troque pelas fotos reais em <code>GALLERY</code>.</p><div class="gal" id="gal"></div></section>
+
+<section id="contato" class="fade"><h2>Contato</h2>
+<div class="grid">
+<div class="card"><div class="ico">⏰</div><h3>Horários</h3><p>Segunda a sábado<br>08h às 18h<br>Pausa para almoço: 12h–13h</p></div>
+<div class="card"><div class="ico">📍</div><h3>Localização</h3><p>Itaperuna — RJ<br><small>Endereço demonstrativo, não informado.</small></p></div>
+<div class="card"><div class="ico">💬</div><h3>Fale conosco</h3><p><a class="btn" id="wa" target="_blank" rel="noopener">WhatsApp (exemplo)</a></p><p><a id="ig" target="_blank" rel="noopener" style="color:var(--gold2)">Instagram (exemplo)</a></p></div>
+</div></section>
+
+<footer><nav><ul><li><a href="#inicio">Início</a></li><li><a href="#servicos">Serviços</a></li><li><a href="#agendar">Agendar</a></li><li><a href="#sobre">Sobre</a></li><li><a href="#galeria">Galeria</a></li><li><a href="#contato">Contato</a></li></ul></nav>
+<div>© DON CORTE BARBEARIA · Site de demonstração para portfólio — nome, preços, número e dados são fictícios.</div></footer>
+
+<script>
+/* ================= CONFIGURAÇÃO (edite aqui) ================= */
+const CFG = {
+  name: 'DON CORTE BARBEARIA',
+  whatsapp: '5500000000000',            // NÚMERO FICTÍCIO — troque (DDI+DDD+número, só dígitos)
+  instagram: 'https://instagram.com/',  // link de exemplo
+  open: 8, close: 18, lunch: [12, 13]   // horário de funcionamento (horas)
+};
+const SERVICES = [ // preço em reais, duração em minutos
+  {id:'corte', n:'Corte masculino', d:'Degradê, tesoura ou máquina, com acabamento na navalha.', p:30, m:40},
+  {id:'barba', n:'Barba', d:'Alinhamento com toalha quente e navalha.', p:20, m:25},
+  {id:'combo', n:'Corte + barba', d:'O pacote completo para sair impecável.', p:45, m:60},
+  {id:'kids',  n:'Corte infantil', d:'Paciência e cuidado para os pequenos.', p:25, m:35},
+  {id:'hidra', n:'Hidratação capilar', d:'Brilho e maciez para os fios.', p:15, m:20}
+];
+const BARBERS = ['Gabriel','Lucas','Matheus'];
+const PERKS = [['✂','Profissionais experientes'],['★','Atendimento personalizado'],['📅','Agendamento online'],['◆','Qualidade em cada detalhe']];
+/* Galeria: coloque a URL da foto em "img" (em hospedagem própria). Sem URL, aparece uma ilustração. */
+const GALLERY = [
+  {t:'Cortes degradê', img:''},{t:'Barbas alinhadas', img:''},
+  {t:'Ambiente da barbearia', img:''},{t:'Cadeiras e equipamentos', img:''}
+];
+/* ============================================================ */
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,'0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const hm = m => `${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const esc = s => s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const st = {svc:null, bar:null, date:null, time:null, view:new Date()};
+st.view.setDate(1);
+
+/* ---- Persistência (localStorage; não sincroniza entre dispositivos) ---- */
+function load(){ try{ return JSON.parse(localStorage.getItem('doncorte:bookings')||'[]'); }catch(e){ return []; } }
+function save(list){ try{ localStorage.setItem('doncorte:bookings', JSON.stringify(list)); return true; }catch(e){ return false; } }
+
+/* ---- Ocupação demonstrativa (determinística) + agendamentos salvos ---- */
+function busy(bar, date){
+  let h = 0; for (const c of bar+date) h = (h*31 + c.charCodeAt(0)) >>> 0;
+  const out = [];
+  for (let i=0;i<4;i++){ const s = CFG.open*60 + ((h>>(i*3))%16)*30; out.push([s, s+30*(1+((h>>(i+9))%2))]); }
+  load().filter(b=>b.bar===bar && b.date===date).forEach(b=>out.push([b.start,b.end]));
+  return out;
+}
+const svc = () => SERVICES.find(s=>s.id===st.svc);
+
+/* ---- Slots disponíveis para a seleção atual ---- */
+function slotList(){
+  const s = svc(), L = CFG.lunch[0]*60, L2 = CFG.lunch[1]*60, C = CFG.close*60, now = new Date();
+  const b = busy(st.bar, st.date), today = st.date === iso(now), nowMin = now.getHours()*60+now.getMinutes();
+  const res = [];
+  for (let t=CFG.open*60; t<C; t+=30){
+    const e = t + s.m;
+    if (!((e<=L) || (t>=L2 && e<=C))) continue;            // respeita almoço e fechamento
+    const off = (today && t<=nowMin) || b.some(([a,z]) => t<z && e>a); // passado ou conflito
+    res.push({t, off});
+  }
+  return res;
+}
+
+/* ---- Renderização ---- */
+function renderStatic(){
+  $('perks').innerHTML = PERKS.map(p=>`<div class="card"><div class="ico">${p[0]}</div><h3>${p[1]}</h3></div>`).join('');
+  $('svcGrid').innerHTML = SERVICES.map(s=>`<div class="card"><h3>${s.n}</h3><p>${s.d}</p><div class="meta"><span>${brl(s.p)}</span><small>${s.m} min</small></div><button class="btn ghost" onclick="pick('${s.id}')">Agendar este serviço</button></div>`).join('');
+  $('gal').innerHTML = GALLERY.map(g=>`<div class="tile">${g.img?`<img src="${g.img}" alt="${g.t}" loading="lazy">`:`<svg viewBox="0 0 24 24" fill="none" stroke="#c9a24b" stroke-width="1.2" aria-hidden="true"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.5 7.5L20 18M8.5 16.5L20 6"/></svg>`}<b>${g.t}</b></div>`).join('');
+  $('wa').href = `https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent('Olá! Vim pelo site de demonstração da Don Corte.')}`;
+  $('ig').href = CFG.instagram;
+}
+function renderOpts(){
+  $('svcOpts').innerHTML = SERVICES.map(s=>`<button class="opt ${st.svc===s.id?'sel':''}" onclick="pick('${s.id}',1)">${s.n} · ${brl(s.p)}</button>`).join('');
+  $('barOpts').innerHTML = BARBERS.map(b=>`<button class="opt ${st.bar===b?'sel':''}" onclick="st.bar='${b}';st.time=null;renderAll()">${b}</button>`).join('');
+}
+function renderCal(){
+  const v = st.view, today = new Date(); today.setHours(0,0,0,0);
+  $('mon').textContent = v.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+  $('prev').disabled = v.getFullYear()===today.getFullYear() && v.getMonth()<=today.getMonth();
+  let h = ['D','S','T','Q','Q','S','S'].map(d=>`<span>${d}</span>`).join('') + '<i></i>'.repeat(v.getDay());
+  const n = new Date(v.getFullYear(), v.getMonth()+1, 0).getDate();
+  for (let d=1; d<=n; d++){
+    const dt = new Date(v.getFullYear(), v.getMonth(), d), k = iso(dt);
+    const off = dt<today || dt.getDay()===0;               // passado ou domingo
+    h += `<button class="opt ${st.date===k?'sel':''}" ${off?'disabled':''} onclick="st.date='${k}';st.time=null;renderAll()">${d}</button>`;
+  }
+  $('days').innerHTML = h;
+}
+function renderSlots(){
+  const box = $('slots');
+  if (!(st.svc && st.bar && st.date)) { box.innerHTML = '<span class="note">Escolha serviço, barbeiro e data para ver os horários.</span>'; return; }
+  const l = slotList();
+  box.innerHTML = l.length ? l.map(s=>`<button class="opt ${st.time===s.t?'sel':''}" ${s.off?'disabled':''} onclick="st.time=${s.t};renderAll()">${hm(s.t)}</button>`).join('') : '<span class="note">Sem horários nesta combinação.</span>';
+}
+function renderSum(){
+  const s = svc(), d = st.date ? new Date(st.date+'T12:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'}) : '—';
+  const t = st.time!=null ? `${hm(st.time)} às ${hm(st.time+s.m)}` : '—';
+  $('sum').innerHTML = [['Serviço', s?s.n:'—'],['Barbeiro', st.bar||'—'],['Data', d],['Horário', t],['Preço', s?brl(s.p):'—']].map(r=>`<div><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
+}
+function renderAll(){ renderOpts(); renderCal(); renderSlots(); renderSum(); }
+
+/* ---- Interações ---- */
+function pick(id, stay){
+  st.svc = id; st.time = null; renderAll();
+  if(!stay) $('agendar').scrollIntoView();
+}
+$('prev').onclick = ()=>{ st.view.setMonth(st.view.getMonth()-1); renderCal(); };
+$('next').onclick = ()=>{ st.view.setMonth(st.view.getMonth()+1); renderCal(); };
+$('burger').onclick = ()=> $('menu').classList.toggle('open');
+$('menu').onclick = e => { if(e.target.tagName==='A') $('menu').classList.remove('open'); };
+
+function say(t, ok){ const m=$('msg'); m.textContent=t; m.className='msg '+(ok?'ok':'err'); }
+$('go').onclick = () => {
+  const nome = $('nome').value.trim(), tel = $('tel').value.replace(/\D/g,'');
+  if (!st.svc) return say('Escolha um serviço.');
+  if (!st.bar) return say('Escolha um barbeiro.');
+  if (!st.date) return say('Selecione uma data.');
+  if (st.time==null) return say('Escolha um horário disponível.');
+  if (nome.length<3) return say('Informe seu nome completo.');
+  if (tel.length<10 || tel.length>11) return say('Informe um telefone válido com DDD.');
+  // revalida conflito no momento da confirmação
+  const s = svc(), end = st.time + s.m;
+  if (busy(st.bar, st.date).some(([a,z])=>st.time<z && end>a)) { renderAll(); return say('Esse horário acabou de ser ocupado. Escolha outro.'); }
+  const btn = $('go'); btn.disabled = true; btn.textContent = 'Confirmando...'; say('');
+  setTimeout(()=>{ // simula latência de um servidor
+    const list = load(); list.push({svc:s.id, bar:st.bar, date:st.date, start:st.time, end, nome, tel});
+    if (!save(list)) { btn.disabled=false; btn.textContent='Confirmar agendamento'; return say('Não foi possível salvar neste navegador.'); }
+    done(s, nome, end);
+  }, 700);
+};
+function done(s, nome, end){
+  const d = new Date(st.date+'T12:00').toLocaleDateString('pt-BR');
+  const txt = `Olá! Quero confirmar meu agendamento na ${CFG.name}:\n• Nome: ${nome}\n• Serviço: ${s.n}\n• Barbeiro: ${st.bar}\n• Data: ${d}\n• Horário: ${hm(st.time)} às ${hm(end)}\n• Preço: ${brl(s.p)}`;
+  $('book').innerHTML = `<div class="done"><div class="check">✔</div><h3 style="font-size:1.6rem">Agendamento confirmado!</h3>
+  <p>${esc(nome)}, seu horário de <b>${s.n}</b> com <b>${st.bar}</b> está reservado para <b>${d}</b>, das <b>${hm(st.time)}</b> às <b>${hm(end)}</b> (${brl(s.p)}).</p>
+  <p><a class="btn" target="_blank" rel="noopener" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent(txt)}">Enviar detalhes pelo WhatsApp</a></p>
+  <p class="note">Nada foi enviado automaticamente: toque no botão e conclua o envio no WhatsApp.<br>Demonstração: o agendamento fica salvo apenas neste navegador (localStorage) e não sincroniza entre dispositivos.</p>
+  <button class="btn ghost" onclick="location.reload()">Novo agendamento</button></div>`;
+}
+
+/* ---- Animação de entrada ---- */
+const io = new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} }), {threshold:.1});
+document.querySelectorAll('.fade').forEach(el=>io.observe(el));
+
+renderStatic(); renderAll();
+</script>
+</body>
+</html>
